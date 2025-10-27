@@ -2,6 +2,7 @@
 
 namespace App\Services;
 use App\Repositories\ArticleRepository;
+use Illuminate\Support\Facades\Storage;
 use illuminate\Support\Str;
 
 class ArticleService {
@@ -21,6 +22,19 @@ class ArticleService {
     }
 
     public function updateArticle($id, $data){
+
+        $article = $this->articleRepository->find($id);
+
+        if (isset($data['image'])) {
+            # code...
+            if($article->image && Storage::disk('public')->exists($article->image)){
+                Storage::disk('public')->delete($article->image);
+            }
+
+            $imagePath = $data['image']->store('article', 'public');
+
+            $data['image'] = $imagePath;
+        }
         return $this->articleRepository->update($id,$data);
     }
 
