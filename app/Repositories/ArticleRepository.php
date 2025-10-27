@@ -4,6 +4,10 @@
 
   class ArticleRepository {
     
+
+    public function find($id){
+      return Article::findOrFail($id);
+    }
     public function create(array $data){
        return Article::create($data);
     }
