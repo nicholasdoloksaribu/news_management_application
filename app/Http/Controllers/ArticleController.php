@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreArticleRequest;
+use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\ArticleResource;
 use App\Models\Article;
 use App\Models\User;
@@ -78,23 +79,18 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateArticleRequest $request, $id)
     {
         //
-        $request->validate([
-            'title' => 'sometimes|string',
-            'content'=> 'sometimes|string',
-            'image' => 'sometimes|string',
-            'user_id' => 'sometimes|integer|exists:users,id'
-        ]);
 
-        $data = array_filter($request->only(['title', 'content', 'image', 'user_id']));
-        $article = $this->articleService->updateArticle($id,$data);
+
+        $validated = $request->validated();
+        $article = $this->articleService->updateArticle($id,$validated);
 
         return response()->json([
             'message'=> 'Article Success Update',
             'data'=> new ArticleResource($article)
-        ]);
+        ],200);
     }
 
     /**
@@ -106,6 +102,6 @@ class ArticleController extends Controller
         return response()->json([
             'message' => 'Article success deleted',
             'data' => new ArticleResource($this->articleService->deleteArticle($id))
-        ]);
+        ],200);
     }
 }
