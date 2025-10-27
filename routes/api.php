@@ -15,10 +15,10 @@ Route::get('/user', function (Request $request) {
 
 Route::middleware('auth:api')->group( function(){
 Route::get('/news', [ArticleController::class, 'index']);
-Route::post('/news', [ArticleController::class, 'store']);
+Route::post('/news', [ArticleController::class, 'store'])->middleware('check.admin');
 Route::get('/news/{id_article}', [ArticleController::class, 'show']);
-Route::put('/news/{id_article}', [ArticleController::class, 'update']);
-Route::delete('/news/{id_article}',[ArticleController::class, 'destroy']);
+Route::post('/news/{id_article}', [ArticleController::class, 'update'])->middleware('check.admin');
+Route::delete('/news/{id_article}',[ArticleController::class, 'destroy'])->middleware('check.admin');
 
 //Comment Routes
 Route::post('/comments', [CommentController::class, 'store']);
@@ -31,4 +31,4 @@ Route::delete('/comments/{id_comment}', [CommentController::class, 'destroy']);
 Route::get('/histories', [HistoryController::class, 'index']);
 });
 //Login Route
-Route::post('/loginUser', [LoginController::class, 'login']);
+Route::post('/login', [LoginController::class, 'login']);
