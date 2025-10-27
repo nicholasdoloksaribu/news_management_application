@@ -12,7 +12,7 @@ class StoreArticleRequest extends FormRequest
     public function authorize(): bool
     {
         
-        return auth()->user()->role == 1;
+        return true;
     }
 
     /**
