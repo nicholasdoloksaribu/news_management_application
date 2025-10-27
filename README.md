@@ -15,5 +15,3 @@ Struktur kodenya dibuat dengan **Service–Repository Pattern** agar rapi dan mu
 - API Resource untuk respons JSON rapi
 - Logging otomatis (Observer + Event & Listener)
 - Proteksi API menggunakan Middleware `auth:api`
-
----
