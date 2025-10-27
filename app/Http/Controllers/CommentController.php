@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCommentRequest;
+use App\Http\Requests\UpdateArticleRequest;
+use App\Http\Requests\UpdateCommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Jobs\ProcessCommentJob;
 use App\Models\Comment;
@@ -43,6 +45,7 @@ class CommentController extends Controller
     {
         //
         $validated = $request->validated();
+        $validated['user_id'] = auth()->user()->id;
         ProcessCommentJob::dispatch($validated);
 
         return response()->json([
@@ -73,20 +76,14 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCommentRequest $request, $id)
     {
         //
-        $request->validate([
-            'comment' => 'sometimes|string',
-            'article_id' => 'sometimes|integer|exists:articles,id',
-            'user_id' => 'sometimes|integer|exists:users,id'
-        ]);
-
-        $data = array_filter($request->only(['comment', 'article_id', 'user_id']));
-
+        $validated = $request->validated();
+        $validated['user_id'] = auth()->user()->id;
         return response()->json([
             'message' => 'comment succes updated',
-            'data' => new CommentResource($this->commentService->updateComment($id,$data))
+            'data' => new CommentResource($this->commentService->updateComment($id,$validated))
         ]);
 
     }
