@@ -24,7 +24,6 @@ class StoreCommentRequest extends FormRequest
         return [
             //
             'comment' => 'required|string',
-            'user_id' => 'required|integer|exists:users,id',
             'article_id'=> 'required|integer|exists:articles,id'
         ];
     }
