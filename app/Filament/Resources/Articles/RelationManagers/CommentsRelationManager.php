@@ -43,7 +43,9 @@ class CommentsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                CreateAction::make(),
+
+                CreateAction::make()->mutateDataUsing(fn(array $data)=> array_merge($data, 
+                ['user_id' => auth()->user()->id])),
                 AssociateAction::make(),
             ])
             ->recordActions([
