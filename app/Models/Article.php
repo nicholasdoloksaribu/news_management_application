@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Article extends Model
 {
@@ -16,11 +17,16 @@ class Article extends Model
         'user_id'
     ];
 
+    
     public function comments(){
         return $this->hasMany(Comment::class);
     }
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function histories(){
+        return $this->hasMany(History::class);
     }
 }
