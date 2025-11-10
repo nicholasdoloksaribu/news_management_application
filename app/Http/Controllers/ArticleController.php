@@ -9,6 +9,8 @@ use App\Models\Article;
 use App\Models\User;
 use App\Services\ArticleService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class ArticleController extends Controller
 {
@@ -25,7 +27,18 @@ class ArticleController extends Controller
     public function index()
     {
         //
-        $articles = Article::with('user')->where('isDeleted', 0)->paginate(5);
+        $start = microtime(true);
+        $cacheKey = 'articles_page_'. request('page',1);
+
+        $articles = Cache::remember($cacheKey, now()->addMinutes(10), function(){
+            Log::info('Cache miss: mengambil data dari DB');
+            return Article::where('isDeleted', 0)->paginate(5);
+        }); 
+        
+        Log::info('Cache hit untuk key: ' . $cacheKey);
+
+        $duration = microtime(true) - $start;
+        Log::info('Waktu eksekusi: ' . $duration . ' detik');
         return ArticleResource::collection($articles);
     }
 
@@ -64,7 +77,7 @@ class ArticleController extends Controller
     public function show($id)
     {
         //
-        $article = Article::with(['comments','user'])->where('isDeleted', 0)->findOrFail($id);
+        $article = Article::with(['comments','user'])->findOrFail($id);
         return new ArticleResource($article);
     }
 
