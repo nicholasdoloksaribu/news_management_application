@@ -4,6 +4,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,8 @@ Route::delete('/comments/{id_comment}', [CommentController::class, 'destroy']);
 
 //History Routes
 Route::get('/histories', [HistoryController::class, 'index']);
+Route::post('/logout', [LogoutController::class, 'logout']);
+
 });
 //Login Route
 Route::post('/login', [LoginController::class, 'login']);
