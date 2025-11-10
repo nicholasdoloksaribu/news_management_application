@@ -50,6 +50,11 @@ class CommentController extends Controller
 
         return response()->json([
             'message'=> 'comment succes process',
+            'data' => [
+                'userId'=> auth()->user()->id,
+                'comment'=> $validated['comment'],
+                'isProcessing'=> true
+            ]
         ]);
     }
 

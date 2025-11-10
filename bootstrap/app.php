@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\CheckAdmin;
+use Laravel\Passport\Http\Middleware\CreateFreshApiToken;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,6 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'check.admin' => CheckAdmin::class,
         ]);
+        // $middleware->group('api', [
+        //     CreateFreshApiToken::class
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
